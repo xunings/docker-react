@@ -1,0 +1,25 @@
+version: '3'
+services:
+  react-app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:3000"
+    volumes:
+      # explicity keeps the built node_modules folder,
+      # otherwise it will be erased by the volume mapping. 
+      - /app/node_modules
+      - .:/app
+    security_opt:
+      - apparmor=unconfined
+  tests:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - /app/node_modules
+      - .:/app
+    command: ["npm", "run", "test"]
+    security_opt:
+      - apparmor=unconfined
